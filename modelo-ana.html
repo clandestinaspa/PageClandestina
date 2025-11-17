@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Perfil profesional de Ana - Modelo VIP">
+    <title>Ana - Modelo Profesional VIP</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/x-icon" href="images/logo/icologo.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Barra Superior Negra -->
+    <div class="top-bar">
+        <div class="container">
+            <div class="top-bar-content">
+                <p class="top-bar-text">
+                    <span class="top-bar-emoji">✨</span>
+                    <span class="top-bar-highlight">Modelos VIP Profesionales</span>
+                    | Acompañantes de lujo con elegancia y discreción garantizada
+                    <span class="top-bar-emoji">✨</span>
+                </p>
+                <a href="index.html#contacto" class="btn-top-bar">TRABAJA CON NOSOTRAS</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navegación Principal -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="images/logo/logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                <span class="logo-text">Agencia Premium</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="index.html#catalogo">Catálogo</a></li>
+                <li><a href="index.html#sobre-nosotros">La Agencia</a></li>
+                <li><a href="index.html#contacto">Contacto</a></li>
+            </ul>
+            <button class="nav-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Perfil de la Modelo -->
+    <section class="model-profile-section">
+        <div class="container">
+            <div class="model-profile-header">
+                <h1 class="model-profile-name">Ana</h1>
+                <p class="model-profile-subtitle">Modelo Profesional VIP</p>
+            </div>
+
+            <div class="model-profile-content">
+                <!-- Columna Izquierda: Descripción y Botones -->
+                <div class="model-info-column">
+                    <!-- Descripción -->
+                    <div class="model-description-section">
+                        <h2 class="section-subtitle">Sobre Mí</h2>
+                        <div class="model-description">
+                            <p>Profesional, elegante y discreta. Especializada en acompañamiento de lujo con un enfoque en la privacidad y el profesionalismo. Con años de experiencia en la industria, ofrezco servicios personalizados adaptados a tus necesidades.</p>
+                            <p>Mi compromiso es brindarte una experiencia única, sofisticada y memorable, siempre con el más alto nivel de discreción y profesionalismo.</p>
+                        </div>
+                    </div>
+
+                    <!-- Botones de Contacto WhatsApp -->
+                    <div class="model-whatsapp-buttons">
+                        <a href="https://wa.me/573239484452?text=Hola,%20me%20interesa%20conocer%20más%20sobre%20Ana.%20Modelo:%20Ana" 
+                           class="btn-whatsapp-model" 
+                           target="_blank" 
+                           rel="noopener noreferrer">
+                            <span>💬</span> Escríbeme por WhatsApp
+                        </a>
+                        <a href="https://wa.me/573239484452?text=Hola,%20quiero%20reservar%20una%20cita%20con%20Ana.%20Modelo:%20Ana" 
+                           class="btn-whatsapp-model btn-whatsapp-reserve" 
+                           target="_blank" 
+                           rel="noopener noreferrer">
+                            <span>🔥</span> Reservar Ahora
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Galería -->
+                <div class="model-gallery-column">
+                    <div class="gallery-type-selector">
+                        <button class="gallery-type-btn active" data-type="images">
+                            <span>📸</span> Imágenes
+                        </button>
+                        <button class="gallery-type-btn" data-type="videos">
+                            <span>🎥</span> Videos
+                        </button>
+                    </div>
+                    
+                    <!-- Contenedor de Imágenes -->
+                    <div class="model-gallery-container gallery-content active" data-content="images">
+                        <h2 class="section-subtitle">Galería</h2>
+                        <!-- Imagen Principal Grande -->
+                        <div class="model-main-gallery-image">
+                            <img src="images/modelos/Ana-1.png" alt="Ana" id="mainGalleryImage">
+                        </div>
+                        <!-- Miniaturas -->
+                        <div class="model-gallery-thumbnails">
+                            <div class="thumbnail-item active" data-image="images/modelos/Ana-1.png">
+                                <img src="images/modelos/Ana-1.png" alt="Ana 1" loading="lazy">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Contenedor de Videos -->
+                    <div class="model-gallery-container gallery-content" data-content="videos">
+                        <h2 class="section-subtitle">Videos</h2>
+                        <!-- Video Principal Grande -->
+                        <div class="model-main-gallery-video">
+                            <video id="mainGalleryVideo" controls autoplay muted loop playsinline>
+                                <source src="images/modelos/Ana-2.mp4" type="video/mp4">
+                                Tu navegador no soporta videos HTML5.
+                            </video>
+                        </div>
+                        <!-- Miniaturas de Videos -->
+                        <div class="model-gallery-thumbnails">
+                            <div class="thumbnail-item active" data-video="images/modelos/Ana-2.mp4">
+                                <div class="video-thumbnail">
+                                    <video muted>
+                                        <source src="images/modelos/Ana-2.mp4" type="video/mp4">
+                                    </video>
+                                    <div class="play-icon">▶</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slider de Otras Modelos -->
+    <section class="other-models-slider-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Otras Modelos</h2>
+                <p class="section-subtitle">Descubre más opciones en nuestro catálogo exclusivo</p>
+            </div>
+            <div class="models-slider-container">
+                <div class="models-slider-track">
+                    <div class="model-slide-card">
+                        <a href="modelo-camila.html">
+                            <div class="model-slide-image">
+                                <img src="images/modelos/Camila-1.jpg" alt="Camila" loading="lazy">
+                            </div>
+                            <div class="model-slide-info">
+                                <h3>Camila</h3>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="model-slide-card">
+                        <a href="modelo-maria.html">
+                            <div class="model-slide-image">
+                                <img src="images/modelos/Maria-1.jpg" alt="Maria" loading="lazy">
+                            </div>
+                            <div class="model-slide-info">
+                                <h3>Maria</h3>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="model-slide-card">
+                        <a href="modelo-vanesa.html">
+                            <div class="model-slide-image">
+                                <img src="images/modelos/Vanesa-1.png" alt="Vanesa" loading="lazy">
+                            </div>
+                            <div class="model-slide-info">
+                                <h3>Vanesa</h3>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="model-slide-card">
+                        <a href="modelo-sofia.html">
+                            <div class="model-slide-image">
+                                <img src="images/modelos/Sofia-1.jpg" alt="Sofia" loading="lazy">
+                            </div>
+                            <div class="model-slide-info">
+                                <h3>Sofia</h3>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="model-slide-card">
+                        <a href="modelo-angie.html">
+                            <div class="model-slide-image">
+                                <img src="images/modelos/Angie-1.jpg" alt="Angie" loading="lazy">
+                            </div>
+                            <div class="model-slide-info">
+                                <h3>Angie</h3>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="model-slide-card">
+                        <a href="modelo-catalina.html">
+                            <div class="model-slide-image">
+                                <img src="images/modelos/Catalina-1.jpg" alt="Catalina" loading="lazy">
+                            </div>
+                            <div class="model-slide-info">
+                                <h3>Catalina</h3>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="model-slide-card">
+                        <a href="modelo-valentina.html">
+                            <div class="model-slide-image">
+                                <img src="images/modelos/Valentina-1.png" alt="Valentina" loading="lazy">
+                            </div>
+                            <div class="model-slide-info">
+                                <h3>Valentina</h3>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- Duplicar para efecto infinito -->
+                    <div class="model-slide-card">
+                        <a href="modelo-camila.html">
+                            <div class="model-slide-image">
+                                <img src="images/modelos/Camila-1.jpg" alt="Camila" loading="lazy">
+                            </div>
+                            <div class="model-slide-info">
+                                <h3>Camila</h3>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="model-slide-card">
+                        <a href="modelo-maria.html">
+                            <div class="model-slide-image">
+                                <img src="images/modelos/Maria-1.jpg" alt="Maria" loading="lazy">
+                            </div>
+                            <div class="model-slide-info">
+                                <h3>Maria</h3>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="model-slide-card">
+                        <a href="modelo-vanesa.html">
+                            <div class="model-slide-image">
+                                <img src="images/modelos/Vanesa-1.png" alt="Vanesa" loading="lazy">
+                            </div>
+                            <div class="model-slide-info">
+                                <h3>Vanesa</h3>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>📌 Acerca de</h4>
+                    <ul>
+                        <li><a href="index.html#sobre-nosotros">La Agencia</a></li>
+                        <li><a href="index.html#catalogo">Catálogo</a></li>
+                        <li><a href="index.html#contacto">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>🔐 Garantías</h4>
+                    <p>Modelos verificadas y auténticas. Profesionalismo y discreción garantizada.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>📲 Síguenos</h4>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/clandestinaspa" class="social-link" target="_blank" rel="noopener noreferrer">Facebook</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Agencia Premium. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal para imágenes -->
+    <div id="imageModal" class="modal">
+        <span class="modal-close">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <!-- Botón Flotante WhatsApp -->
+    <a href="https://wa.me/573239484452?text=Hola,%20me%20interesa%20conocer%20más%20sobre%20Ana.%20Modelo:%20Ana" 
+       class="floating-whatsapp" 
+       target="_blank" 
+       rel="noopener noreferrer"
+       aria-label="Contactar por WhatsApp">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" fill="currentColor"/>
+        </svg>
+    </a>
+
+    <script src="script.js"></script>
+    <script>
+        // Galería de imágenes y videos estilo e-commerce
+        document.addEventListener('DOMContentLoaded', function() {
+            // Selector de tipo (Imágenes/Videos)
+            const typeButtons = document.querySelectorAll('.gallery-type-btn');
+            const galleryContents = document.querySelectorAll('.gallery-content');
+            
+            typeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const type = this.getAttribute('data-type');
+                    
+                    // Actualizar botones activos
+                    typeButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Mostrar/ocultar contenidos
+                    galleryContents.forEach(content => {
+                        if (content.getAttribute('data-content') === type) {
+                            content.classList.add('active');
+                        } else {
+                            content.classList.remove('active');
+                        }
+                    });
+                });
+            });
+            
+            // Galería de imágenes
+            const imageThumbnails = document.querySelectorAll('.thumbnail-item[data-image]');
+            const mainImage = document.getElementById('mainGalleryImage');
+            
+            if (imageThumbnails.length > 0 && mainImage) {
+                imageThumbnails.forEach(thumbnail => {
+                    thumbnail.addEventListener('click', function() {
+                        const imageSrc = this.getAttribute('data-image');
+                        mainImage.src = imageSrc;
+                        
+                        imageThumbnails.forEach(thumb => {
+                            thumb.classList.remove('active');
+                        });
+                        this.classList.add('active');
+                    });
+                });
+            }
+            
+            // Galería de videos
+            const videoThumbnails = document.querySelectorAll('.thumbnail-item[data-video]');
+            const mainVideo = document.getElementById('mainGalleryVideo');
+            
+            if (videoThumbnails.length > 0 && mainVideo) {
+                videoThumbnails.forEach(thumbnail => {
+                    thumbnail.addEventListener('click', function() {
+                        const videoSrc = this.getAttribute('data-video');
+                        mainVideo.src = videoSrc;
+                        mainVideo.load();
+                        mainVideo.play();
+                        
+                        videoThumbnails.forEach(thumb => {
+                            thumb.classList.remove('active');
+                        });
+                        this.classList.add('active');
+                    });
+                });
+            }
+            
+            // Reproducir video automáticamente cuando se cambia a la pestaña de videos
+            typeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const type = this.getAttribute('data-type');
+                    if (type === 'videos' && mainVideo) {
+                        setTimeout(() => {
+                            mainVideo.play().catch(e => console.log('Autoplay prevented:', e));
+                        }, 100);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "clandestina-spa",
+  "version": "1.0.0",
+  "description": "Página web profesional para modelos",
+  "main": "index.html",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js"
+  },
+  "keywords": ["portfolio", "model", "website"],
+  "author": "",
+  "license": "ISC"
+}
+
