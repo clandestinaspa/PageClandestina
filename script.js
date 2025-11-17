@@ -323,10 +323,7 @@ function initModelsSlider() {
         }
         
         let currentIndex = isMobile ? 0 : originalCardsCount;
-        let startX = 0;
-        let currentX = 0;
         let isDragging = false;
-        let startTime = 0;
         
         function updateDots() {
             if (!isMobile || !dots.length) return;
@@ -337,35 +334,47 @@ function initModelsSlider() {
         }
         
         function move() {
-            const container = track.parentElement;
-            const width = container.offsetWidth;
-            track.style.transition = isDragging ? 'none' : 'transform 0.4s ease';
-            
             if (isMobile) {
-                track.style.transform = `translateX(-${currentIndex * width}px)`;
-            } else {
-                track.style.transform = `translateX(-${currentIndex * width}px)`;
-                
-                // Resetear posición para bucle infinito
-                if (currentIndex >= originalCardsCount * 2) {
+                // En móvil: el scroll-snap maneja el movimiento
+                // Solo actualizar dots
+                updateDots();
+                return;
+            }
+            
+            // Desktop: usar transform
+            const container = track.parentElement;
+            if (!container) return;
+            
+            const containerRect = container.getBoundingClientRect();
+            const width = containerRect.width;
+            
+            if (!width || width <= 0) {
+                requestAnimationFrame(() => move());
+                return;
+            }
+            
+            track.style.transition = isDragging ? 'none' : 'transform 0.4s ease';
+            track.style.transform = `translateX(-${currentIndex * width}px)`;
+            
+            // Resetear posición para bucle infinito
+            if (currentIndex >= originalCardsCount * 2) {
+                setTimeout(() => {
+                    track.style.transition = 'none';
+                    currentIndex = originalCardsCount;
+                    track.style.transform = `translateX(-${currentIndex * width}px)`;
                     setTimeout(() => {
-                        track.style.transition = 'none';
-                        currentIndex = originalCardsCount;
-                        track.style.transform = `translateX(-${currentIndex * width}px)`;
-                        setTimeout(() => {
-                            track.style.transition = 'transform 0.4s ease';
-                        }, 50);
-                    }, 400);
-                } else if (currentIndex < originalCardsCount) {
+                        track.style.transition = 'transform 0.4s ease';
+                    }, 50);
+                }, 400);
+            } else if (currentIndex < originalCardsCount) {
+                setTimeout(() => {
+                    track.style.transition = 'none';
+                    currentIndex = originalCardsCount * 2 - 1;
+                    track.style.transform = `translateX(-${currentIndex * width}px)`;
                     setTimeout(() => {
-                        track.style.transition = 'none';
-                        currentIndex = originalCardsCount * 2 - 1;
-                        track.style.transform = `translateX(-${currentIndex * width}px)`;
-                        setTimeout(() => {
-                            track.style.transition = 'transform 0.4s ease';
-                        }, 50);
-                    }, 400);
-                }
+                        track.style.transition = 'transform 0.4s ease';
+                    }, 50);
+                }, 400);
             }
             
             updateDots();
@@ -386,58 +395,53 @@ function initModelsSlider() {
             };
         }
         
-        // Swipe para móvil
+        // Para móvil: usar scroll-snap nativo + actualizar dots
         if (isMobile) {
-            track.addEventListener('touchstart', (e) => {
-                startX = e.touches[0].clientX;
-                startTime = Date.now();
-                isDragging = true;
-                track.style.transition = 'none';
-            }, { passive: true });
+            const container = track.parentElement;
             
-            track.addEventListener('touchmove', (e) => {
-                if (!isDragging) return;
-                currentX = e.touches[0].clientX;
-                const diffX = startX - currentX;
-                const container = track.parentElement;
-                const width = container.offsetWidth;
-                const offset = -(currentIndex * width) - diffX;
-                track.style.transform = `translateX(${offset}px)`;
-            }, { passive: true });
-            
-            track.addEventListener('touchend', () => {
-                if (!isDragging) return;
-                isDragging = false;
+            // Actualizar dots cuando se hace scroll
+            container.addEventListener('scroll', () => {
+                const scrollLeft = container.scrollLeft;
+                const cardWidth = window.innerWidth; // 100vw
+                const newIndex = Math.round(scrollLeft / cardWidth);
                 
-                const diffX = startX - currentX;
-                const diffTime = Date.now() - startTime;
-                const minSwipeDistance = 50;
-                const maxSwipeTime = 300;
-                
-                if (Math.abs(diffX) > minSwipeDistance && diffTime < maxSwipeTime) {
-                    if (diffX > 0) {
-                        // Swipe izquierda - siguiente
-                        currentIndex++;
-                        if (currentIndex >= originalCardsCount) currentIndex = 0;
-                    } else {
-                        // Swipe derecha - anterior
-                        currentIndex--;
-                        if (currentIndex < 0) currentIndex = originalCardsCount - 1;
-                    }
+                if (newIndex !== currentIndex && newIndex >= 0 && newIndex < originalCardsCount) {
+                    currentIndex = newIndex;
+                    updateDots();
                 }
-                
-                move();
             }, { passive: true });
             
-            // Click en dots
+            // Click en dots - hacer scroll al card correspondiente
             dots.forEach((dot, i) => {
                 dot.addEventListener('click', () => {
+                    const cardWidth = window.innerWidth;
+                    container.scrollTo({
+                        left: i * cardWidth,
+                        behavior: 'smooth'
+                    });
                     currentIndex = i;
-                    move();
+                    updateDots();
                 });
             });
+            
+            // Inicializar posición de scroll
+            container.scrollLeft = 0;
         }
         
+        // Inicializar posición
         move();
+        
+        // Recalcular en resize para móvil (asegurar que siempre esté centrado)
+        if (isMobile) {
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    // Forzar recálculo del ancho
+                    move();
+                }, 250);
+            });
+            
+        }
     });
 }
