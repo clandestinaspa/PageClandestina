@@ -1,5 +1,5 @@
 // Navegación móvil
-const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+const mobileNavToggle = document.querySelector('.nav-toggle');
 const navMenu = document.querySelector('.nav-menu');
 
 if (mobileNavToggle) {
@@ -16,6 +16,74 @@ document.addEventListener('click', (e) => {
         navMenu.classList.remove('active');
         mobileNavToggle.classList.remove('active');
         document.body.style.overflow = 'auto';
+    }
+});
+
+// Ocultar top-bar al hacer scroll SOLO en móvil (solo al inicio)
+let lastScroll = 0;
+const topBar = document.querySelector('.top-bar');
+const navbar = document.querySelector('.navbar');
+let topBarHidden = false; // Flag para saber si ya se ocultó
+
+function handleScroll() {
+    const currentScroll = window.pageYOffset;
+    const isMobile = window.innerWidth <= 768;
+    
+    // Solo aplicar en móvil
+    if (isMobile && topBar) {
+        // Solo mostrar si está en la parte superior (primeros 50px)
+        if (currentScroll <= 50) {
+            topBar.classList.remove('hidden');
+            topBarHidden = false;
+        } else {
+            // Ocultar cuando se hace scroll hacia abajo y aún no se ha ocultado
+            if (!topBarHidden && currentScroll > lastScroll) {
+                topBar.classList.add('hidden');
+                topBarHidden = true;
+            }
+        }
+    } else {
+        // En PC, asegurar que siempre esté visible
+        if (topBar) {
+            topBar.classList.remove('hidden');
+        }
+    }
+    
+    lastScroll = currentScroll;
+}
+
+// Throttle para mejorar rendimiento
+let ticking = false;
+window.addEventListener('scroll', () => {
+    if (!ticking) {
+        window.requestAnimationFrame(() => {
+            handleScroll();
+            ticking = false;
+        });
+        ticking = true;
+    }
+});
+
+// Resetear cuando se recarga la página
+window.addEventListener('load', () => {
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile && window.pageYOffset <= 50) {
+        topBarHidden = false;
+        if (topBar) {
+            topBar.classList.remove('hidden');
+        }
+    } else if (!isMobile && topBar) {
+        // En PC, asegurar que esté visible
+        topBar.classList.remove('hidden');
+    }
+});
+
+// Asegurar que en PC siempre esté visible al cambiar el tamaño de ventana
+window.addEventListener('resize', () => {
+    const isMobile = window.innerWidth <= 768;
+    if (!isMobile && topBar) {
+        topBar.classList.remove('hidden');
+        topBarHidden = false;
     }
 });
 
@@ -224,30 +292,151 @@ function initModelsSlider() {
         const nextBtn = wrapper.querySelector('.slider-next');
         const cards = Array.from(track.querySelectorAll('.model-slide-card'));
         
-        if (!track || !prevBtn || !nextBtn || cards.length === 0) return;
+        if (!track || cards.length === 0) return;
         
-        // Duplicar para bucle infinito
-        cards.forEach(c => track.appendChild(c.cloneNode(true)));
-        cards.forEach(c => track.insertBefore(c.cloneNode(true), track.firstChild));
+        const isMobile = window.innerWidth <= 768;
+        const originalCardsCount = cards.length;
         
-        let index = cards.length;
-        
-        function move() {
-            const width = track.parentElement.offsetWidth;
-            track.style.transform = `translateX(-${index * width}px)`;
+        // Crear contenedor de dots solo en móvil
+        let dotsContainer = null;
+        let dots = [];
+        if (isMobile) {
+            dotsContainer = document.createElement('div');
+            dotsContainer.className = 'slider-dots-container';
+            wrapper.appendChild(dotsContainer);
+            
+            // Crear dots
+            for (let i = 0; i < originalCardsCount; i++) {
+                const dot = document.createElement('button');
+                dot.className = 'slider-dot';
+                dot.setAttribute('aria-label', `Ir a slide ${i + 1}`);
+                if (i === 0) dot.classList.add('active');
+                dotsContainer.appendChild(dot);
+                dots.push(dot);
+            }
         }
         
-        prevBtn.onclick = () => {
-            index--;
-            if (index < cards.length) index = cards.length * 2 - 1;
-            move();
-        };
+        // Duplicar para bucle infinito solo en desktop
+        if (!isMobile) {
+            cards.forEach(c => track.appendChild(c.cloneNode(true)));
+            cards.forEach(c => track.insertBefore(c.cloneNode(true), track.firstChild));
+        }
         
-        nextBtn.onclick = () => {
-            index++;
-            if (index >= cards.length * 2) index = cards.length;
-            move();
-        };
+        let currentIndex = isMobile ? 0 : originalCardsCount;
+        let startX = 0;
+        let currentX = 0;
+        let isDragging = false;
+        let startTime = 0;
+        
+        function updateDots() {
+            if (!isMobile || !dots.length) return;
+            const realIndex = isMobile ? currentIndex : (currentIndex % originalCardsCount);
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === realIndex);
+            });
+        }
+        
+        function move() {
+            const container = track.parentElement;
+            const width = container.offsetWidth;
+            track.style.transition = isDragging ? 'none' : 'transform 0.4s ease';
+            
+            if (isMobile) {
+                track.style.transform = `translateX(-${currentIndex * width}px)`;
+            } else {
+                track.style.transform = `translateX(-${currentIndex * width}px)`;
+                
+                // Resetear posición para bucle infinito
+                if (currentIndex >= originalCardsCount * 2) {
+                    setTimeout(() => {
+                        track.style.transition = 'none';
+                        currentIndex = originalCardsCount;
+                        track.style.transform = `translateX(-${currentIndex * width}px)`;
+                        setTimeout(() => {
+                            track.style.transition = 'transform 0.4s ease';
+                        }, 50);
+                    }, 400);
+                } else if (currentIndex < originalCardsCount) {
+                    setTimeout(() => {
+                        track.style.transition = 'none';
+                        currentIndex = originalCardsCount * 2 - 1;
+                        track.style.transform = `translateX(-${currentIndex * width}px)`;
+                        setTimeout(() => {
+                            track.style.transition = 'transform 0.4s ease';
+                        }, 50);
+                    }, 400);
+                }
+            }
+            
+            updateDots();
+        }
+        
+        // Botones solo en desktop
+        if (prevBtn && nextBtn && !isMobile) {
+            prevBtn.onclick = () => {
+                currentIndex--;
+                if (currentIndex < originalCardsCount) currentIndex = originalCardsCount * 2 - 1;
+                move();
+            };
+            
+            nextBtn.onclick = () => {
+                currentIndex++;
+                if (currentIndex >= originalCardsCount * 2) currentIndex = originalCardsCount;
+                move();
+            };
+        }
+        
+        // Swipe para móvil
+        if (isMobile) {
+            track.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+                startTime = Date.now();
+                isDragging = true;
+                track.style.transition = 'none';
+            }, { passive: true });
+            
+            track.addEventListener('touchmove', (e) => {
+                if (!isDragging) return;
+                currentX = e.touches[0].clientX;
+                const diffX = startX - currentX;
+                const container = track.parentElement;
+                const width = container.offsetWidth;
+                const offset = -(currentIndex * width) - diffX;
+                track.style.transform = `translateX(${offset}px)`;
+            }, { passive: true });
+            
+            track.addEventListener('touchend', () => {
+                if (!isDragging) return;
+                isDragging = false;
+                
+                const diffX = startX - currentX;
+                const diffTime = Date.now() - startTime;
+                const minSwipeDistance = 50;
+                const maxSwipeTime = 300;
+                
+                if (Math.abs(diffX) > minSwipeDistance && diffTime < maxSwipeTime) {
+                    if (diffX > 0) {
+                        // Swipe izquierda - siguiente
+                        currentIndex++;
+                        if (currentIndex >= originalCardsCount) currentIndex = 0;
+                    } else {
+                        // Swipe derecha - anterior
+                        currentIndex--;
+                        if (currentIndex < 0) currentIndex = originalCardsCount - 1;
+                    }
+                }
+                
+                move();
+            }, { passive: true });
+            
+            // Click en dots
+            dots.forEach((dot, i) => {
+                dot.addEventListener('click', () => {
+                    currentIndex = i;
+                    move();
+                });
+            });
+        }
         
         move();
     });
