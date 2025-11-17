@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /images/
+Disallow: /*.jpg$
+Disallow: /*.png$
+Disallow: /*.gif$
+
+Sitemap: https://clandestinaspa.com/sitemap.xml
+

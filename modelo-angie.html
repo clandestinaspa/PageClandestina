@@ -91,7 +91,7 @@
                     <div class="model-gallery-container">
                         <!-- Imagen Principal Grande -->
                         <div class="model-main-gallery-image">
-                            <img src="images/modelos/Angie-1.jpg" alt="Angie" id="mainGalleryImage">
+                            <img src="images/modelos/Angie-1.jpg" alt="Angie" id="mainGalleryImage" loading="eager" fetchpriority="high">
                         </div>
                         <!-- Miniaturas (solo una imagen) -->
                         <div class="model-gallery-thumbnails">
@@ -112,110 +112,90 @@
                 <h2 class="section-title">Otras Modelos</h2>
                 <p class="section-subtitle">Descubre más opciones en nuestro catálogo exclusivo</p>
             </div>
-            <div class="models-slider-container">
-                <div class="models-slider-track">
+            <div class="models-slider-wrapper">
+                <button class="slider-prev" aria-label="Anterior">‹</button>
+                <div class="models-slider-container">
+                    <div class="models-slider-track">
                     <div class="model-slide-card">
-                        <a href="modelo-camila.html">
-                            <div class="model-slide-image">
-                                <img src="images/modelos/Camila-1.jpg" alt="Camila" loading="lazy">
-                            </div>
+                        <div class="model-slide-image">
+                            <img src="images/modelos/Camila-1.jpg" alt="Camila" loading="lazy">
+                        </div>
+                        <div class="model-slide-content">
                             <div class="model-slide-info">
                                 <h3>Camila</h3>
                             </div>
-                        </a>
+                            <a href="modelo-camila.html" class="btn-visit-model">Visítame</a>
+                        </div>
                     </div>
                     <div class="model-slide-card">
-                        <a href="modelo-maria.html">
-                            <div class="model-slide-image">
-                                <img src="images/modelos/Maria-1.jpg" alt="Maria" loading="lazy">
-                            </div>
+                        <div class="model-slide-image">
+                            <img src="images/modelos/Maria-6.jpg" alt="Maria" loading="lazy">
+                        </div>
+                        <div class="model-slide-content">
                             <div class="model-slide-info">
                                 <h3>Maria</h3>
                             </div>
-                        </a>
+                            <a href="modelo-maria.html" class="btn-visit-model">Visítame</a>
+                        </div>
                     </div>
                     <div class="model-slide-card">
-                        <a href="modelo-ana.html">
-                            <div class="model-slide-image">
-                                <img src="images/modelos/Ana-1.png" alt="Ana" loading="lazy">
-                            </div>
+                        <div class="model-slide-image">
+                            <img src="images/modelos/Ana-1.png" alt="Ana" loading="lazy">
+                        </div>
+                        <div class="model-slide-content">
                             <div class="model-slide-info">
                                 <h3>Ana</h3>
                             </div>
-                        </a>
+                            <a href="modelo-ana.html" class="btn-visit-model">Visítame</a>
+                        </div>
                     </div>
                     <div class="model-slide-card">
-                        <a href="modelo-vanesa.html">
-                            <div class="model-slide-image">
-                                <img src="images/modelos/Vanesa-1.png" alt="Vanesa" loading="lazy">
-                            </div>
+                        <div class="model-slide-image">
+                            <img src="images/modelos/Vanesa-1.png" alt="Vanesa" loading="lazy">
+                        </div>
+                        <div class="model-slide-content">
                             <div class="model-slide-info">
                                 <h3>Vanesa</h3>
                             </div>
-                        </a>
+                            <a href="modelo-vanesa.html" class="btn-visit-model">Visítame</a>
+                        </div>
                     </div>
                     <div class="model-slide-card">
-                        <a href="modelo-sofia.html">
-                            <div class="model-slide-image">
-                                <img src="images/modelos/Sofia-1.jpg" alt="Sofia" loading="lazy">
-                            </div>
+                        <div class="model-slide-image">
+                            <img src="images/modelos/Sofia-1.jpg" alt="Sofia" loading="lazy">
+                        </div>
+                        <div class="model-slide-content">
                             <div class="model-slide-info">
                                 <h3>Sofia</h3>
                             </div>
-                        </a>
+                            <a href="modelo-sofia.html" class="btn-visit-model">Visítame</a>
+                        </div>
                     </div>
                     <div class="model-slide-card">
-                        <a href="modelo-catalina.html">
-                            <div class="model-slide-image">
-                                <img src="images/modelos/Catalina-1.jpg" alt="Catalina" loading="lazy">
-                            </div>
+                        <div class="model-slide-image">
+                            <img src="images/modelos/Catalina-1.jpg" alt="Catalina" loading="lazy">
+                        </div>
+                        <div class="model-slide-content">
                             <div class="model-slide-info">
                                 <h3>Catalina</h3>
                             </div>
-                        </a>
+                            <a href="modelo-catalina.html" class="btn-visit-model">Visítame</a>
+                        </div>
                     </div>
                     <div class="model-slide-card">
-                        <a href="modelo-valentina.html">
-                            <div class="model-slide-image">
-                                <img src="images/modelos/Valentina-1.png" alt="Valentina" loading="lazy">
-                            </div>
+                        <div class="model-slide-image">
+                            <img src="images/modelos/Valentina-1.png" alt="Valentina" loading="lazy">
+                        </div>
+                        <div class="model-slide-content">
                             <div class="model-slide-info">
                                 <h3>Valentina</h3>
                             </div>
-                        </a>
+                            <a href="modelo-valentina.html" class="btn-visit-model">Visítame</a>
+                        </div>
                     </div>
-                    <!-- Duplicar para efecto infinito -->
-                    <div class="model-slide-card">
-                        <a href="modelo-camila.html">
-                            <div class="model-slide-image">
-                                <img src="images/modelos/Camila-1.jpg" alt="Camila" loading="lazy">
-                            </div>
-                            <div class="model-slide-info">
-                                <h3>Camila</h3>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="model-slide-card">
-                        <a href="modelo-maria.html">
-                            <div class="model-slide-image">
-                                <img src="images/modelos/Maria-1.jpg" alt="Maria" loading="lazy">
-                            </div>
-                            <div class="model-slide-info">
-                                <h3>Maria</h3>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="model-slide-card">
-                        <a href="modelo-ana.html">
-                            <div class="model-slide-image">
-                                <img src="images/modelos/Ana-1.png" alt="Ana" loading="lazy">
-                            </div>
-                            <div class="model-slide-info">
-                                <h3>Ana</h3>
-                            </div>
-                        </a>
                     </div>
                 </div>
+                <button class="slider-next" aria-label="Siguiente">›</button>
             </div>
         </div>
     </section>
