@@ -1101,6 +1101,7 @@ section {
         width: 100%;
         z-index: 1000;
         transition: top 0.3s ease;
+        height: 70px;
     }
     
     /* Cuando top-bar está oculta, navbar sube */
@@ -1111,16 +1112,25 @@ section {
     .nav-menu {
         position: fixed;
         left: -100%;
-        top: 0;
+        top: 70px;
+        height: calc(100vh - 70px);
         flex-direction: column;
         background-color: var(--blanco);
         width: 100%;
-        text-align: center;
-        transition: 0.3s;
-        box-shadow: 0 10px 27px rgba(0, 0, 0, 0.1);
-        padding: 2rem 0;
+        text-align: left;
+        transition: left 0.3s ease;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        padding: 1.5rem 0;
         gap: 0;
         z-index: 1002;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Ajustar cuando top-bar está oculta */
+    .top-bar.hidden ~ .navbar .nav-menu {
+        top: 70px;
+        height: calc(100vh - 70px);
     }
 
     .nav-menu.active {
@@ -1128,35 +1138,102 @@ section {
     }
 
     .nav-menu li {
-        margin: 1rem 0;
+        margin: 0.5rem 0;
+        width: 100%;
+    }
+
+    .nav-menu a {
+        display: block;
+        padding: 1rem 1.5rem;
+        width: 100%;
+        text-align: left;
+        font-size: 1rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .nav-menu a:hover,
+    .nav-menu a:active {
+        background-color: rgba(255, 20, 147, 0.05);
+        color: var(--rosa-fosforescente);
+    }
+
+    .nav-menu li:last-child a {
+        border-bottom: none;
     }
 
     .nav-dropdown {
         position: relative;
+        width: 100%;
+    }
+
+    .nav-dropdown > a {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .dropdown-arrow {
+        transition: transform 0.3s ease;
+    }
+
+    .nav-dropdown.active .dropdown-arrow {
+        transform: rotate(180deg);
     }
 
     .dropdown-menu {
         position: static;
-        opacity: 1;
-        visibility: visible;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        visibility: hidden;
         transform: none;
         box-shadow: none;
-        background-color: var(--gris-claro);
-        margin-top: 0.5rem;
-        border-radius: 5px;
-        padding: 0.5rem 0;
+        background-color: rgba(0, 0, 0, 0.02);
+        margin-top: 0;
+        margin-left: 0;
+        border-radius: 0;
+        padding: 0;
+        border-left: 3px solid transparent;
+        transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease, border-color 0.3s ease;
+    }
+
+    .nav-dropdown.active .dropdown-menu {
+        max-height: 200px;
+        opacity: 1;
+        visibility: visible;
+        padding: 0;
+        margin-top: 0;
+        border-left-color: var(--rosa-fosforescente);
+    }
+
+    .dropdown-menu li {
+        margin: 0;
     }
 
     .dropdown-menu a {
-        padding: 0.6rem 1rem;
+        padding: 0.9rem 1.5rem 0.9rem 2.5rem;
+        font-size: 0.95rem;
+        color: var(--negro);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+        transition: background-color 0.2s ease, padding-left 0.2s ease, color 0.2s ease;
     }
 
     .dropdown-menu a:hover {
-        padding-left: 1.5rem;
+        background-color: rgba(255, 20, 147, 0.08);
+        padding-left: 3rem;
+        color: var(--rosa-fosforescente);
+    }
+
+    .dropdown-menu li:last-child a {
+        border-bottom: none;
     }
 
     .nav-toggle {
         display: flex;
+        z-index: 1003;
+        position: relative;
     }
 
     .nav-toggle.active span:nth-child(1) {
@@ -1169,6 +1246,11 @@ section {
 
     .nav-toggle.active span:nth-child(3) {
         transform: rotate(-45deg) translate(7px, -7px);
+    }
+
+    /* Mejorar la apariencia del menú activo */
+    .nav-menu.active {
+        box-shadow: 2px 0 20px rgba(0, 0, 0, 0.15);
     }
 
     .hero {

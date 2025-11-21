@@ -1,12 +1,40 @@
 // Navegación móvil
 const mobileNavToggle = document.querySelector('.nav-toggle');
 const navMenu = document.querySelector('.nav-menu');
+const navDropdown = document.querySelector('.nav-dropdown');
+const dropdownLink = navDropdown ? navDropdown.querySelector('a') : null;
 
+// Toggle del menú principal
 if (mobileNavToggle) {
-    mobileNavToggle.addEventListener('click', () => {
+    mobileNavToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
         navMenu.classList.toggle('active');
         mobileNavToggle.classList.toggle('active');
         document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : 'auto';
+        
+        // Cerrar dropdown cuando se cierra el menú
+        if (!navMenu.classList.contains('active') && navDropdown) {
+            navDropdown.classList.remove('active');
+        }
+    });
+}
+
+// Toggle del dropdown en móvil
+if (dropdownLink && navDropdown) {
+    dropdownLink.addEventListener('click', (e) => {
+        // Solo en móvil
+        if (window.innerWidth <= 768) {
+            e.preventDefault();
+            e.stopPropagation();
+            navDropdown.classList.toggle('active');
+        }
+    });
+    
+    // También manejar el resize para cerrar dropdown si se cambia a desktop
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768 && navDropdown) {
+            navDropdown.classList.remove('active');
+        }
     });
 }
 
@@ -16,8 +44,38 @@ document.addEventListener('click', (e) => {
         navMenu.classList.remove('active');
         mobileNavToggle.classList.remove('active');
         document.body.style.overflow = 'auto';
+        
+        // Cerrar dropdown también
+        if (navDropdown) {
+            navDropdown.classList.remove('active');
+        }
     }
 });
+
+// Cerrar menú al hacer clic en un enlace del menú (excepto el dropdown)
+if (navMenu) {
+    const navLinks = navMenu.querySelectorAll('a');
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            // No cerrar si es el enlace del dropdown en móvil
+            if (window.innerWidth <= 768 && navDropdown && navDropdown.contains(link) && link === dropdownLink) {
+                return; // Ya se maneja en el evento del dropdown
+            }
+            
+            // Cerrar menú móvil después de un pequeño delay para permitir la navegación
+            setTimeout(() => {
+                if (window.innerWidth <= 768) {
+                    navMenu.classList.remove('active');
+                    mobileNavToggle.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                    if (navDropdown) {
+                        navDropdown.classList.remove('active');
+                    }
+                }
+            }, 100);
+        });
+    });
+}
 
 // Ocultar top-bar al hacer scroll SOLO en móvil (solo al inicio)
 let lastScroll = 0;
