@@ -503,3 +503,351 @@ function initModelsSlider() {
         }
     });
 }
+
+// ============================================
+// GOOGLE ANALYTICS EVENT TRACKING
+// ============================================
+
+// Función helper para enviar eventos a Google Analytics
+function trackEvent(eventName, eventParams = {}) {
+    if (typeof gtag !== 'undefined') {
+        gtag('event', eventName, eventParams);
+        console.log('Event tracked:', eventName, eventParams);
+    }
+}
+
+// Función para obtener el nombre del modelo desde la URL o el elemento
+function getModelName(element) {
+    // Intentar obtener del href
+    const href = element.getAttribute('href') || '';
+    const modelMatch = href.match(/modelo-(\w+)\.html/);
+    if (modelMatch) {
+        return modelMatch[1].charAt(0).toUpperCase() + modelMatch[1].slice(1);
+    }
+    
+    // Intentar obtener del texto o atributos data
+    const modelName = element.getAttribute('data-model') || 
+                     element.closest('.model-card')?.querySelector('.model-name')?.textContent?.trim() ||
+                     element.textContent?.trim();
+    return modelName || 'Unknown';
+}
+
+// Función para obtener la página actual
+function getCurrentPage() {
+    const path = window.location.pathname;
+    if (path.includes('modelo-')) {
+        const match = path.match(/modelo-(\w+)\.html/);
+        return match ? `Modelo: ${match[1].charAt(0).toUpperCase() + match[1].slice(1)}` : path;
+    }
+    return path === '/' || path.includes('index.html') ? 'Home' : path.replace('.html', '').replace('/', '');
+}
+
+// 1. TRACKING DE CLICS EN MODELOS (Catálogo y Slider)
+document.addEventListener('DOMContentLoaded', () => {
+    // Clics en botones "Ver Perfil" del catálogo
+    const modelButtons = document.querySelectorAll('.btn-model-elegant, .btn-view-profile');
+    modelButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            const modelName = getModelName(button);
+            trackEvent('view_model_profile', {
+                'model_name': modelName,
+                'page_location': getCurrentPage(),
+                'button_type': button.classList.contains('btn-model-elegant') ? 'catalog_button' : 'overlay_button',
+                'event_category': 'Model Interaction',
+                'event_label': `View ${modelName} Profile`
+            });
+        });
+    });
+
+    // Clics en cards de modelos
+    const modelCards = document.querySelectorAll('.model-card');
+    modelCards.forEach(card => {
+        card.addEventListener('click', (e) => {
+            // Solo si no es un clic directo en un botón (ya se rastrea arriba)
+            if (!e.target.closest('a')) {
+                const modelName = card.querySelector('.model-name')?.textContent?.trim();
+                if (modelName) {
+                    trackEvent('model_card_click', {
+                        'model_name': modelName,
+                        'page_location': getCurrentPage(),
+                        'event_category': 'Model Interaction',
+                        'event_label': `Click ${modelName} Card`
+                    });
+                }
+            }
+        });
+    });
+
+    // Tracking de modelos vistos en el slider
+    const sliderCards = document.querySelectorAll('.model-slide-card');
+    if (sliderCards.length > 0) {
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.5 // Cuando el 50% del card es visible
+        };
+
+        const modelViewObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const card = entry.target;
+                    const modelName = card.querySelector('.model-slide-info h3')?.textContent?.trim();
+                    if (modelName) {
+                        trackEvent('model_viewed_slider', {
+                            'model_name': modelName,
+                            'page_location': getCurrentPage(),
+                            'event_category': 'Model View',
+                            'event_label': `Viewed ${modelName} in Slider`
+                        });
+                    }
+                }
+            });
+        }, observerOptions);
+
+        sliderCards.forEach(card => {
+            modelViewObserver.observe(card);
+        });
+    }
+});
+
+// 2. TRACKING DE BOTONES DE WHATSAPP
+document.addEventListener('DOMContentLoaded', () => {
+    // Botones de WhatsApp en páginas de modelos
+    const whatsappButtons = document.querySelectorAll('.btn-whatsapp-model, .floating-whatsapp');
+    whatsappButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            const href = button.getAttribute('href') || '';
+            const isReserve = button.classList.contains('btn-whatsapp-reserve') || 
+                            button.textContent?.includes('Reservar');
+            const isFloating = button.classList.contains('floating-whatsapp');
+            
+            // Obtener nombre del modelo desde la URL o la página
+            let modelName = 'General';
+            if (window.location.pathname.includes('modelo-')) {
+                const match = window.location.pathname.match(/modelo-(\w+)\.html/);
+                if (match) {
+                    modelName = match[1].charAt(0).toUpperCase() + match[1].slice(1);
+                }
+            }
+            
+            trackEvent('whatsapp_click', {
+                'model_name': modelName,
+                'button_type': isReserve ? 'reserve' : (isFloating ? 'floating' : 'contact'),
+                'page_location': getCurrentPage(),
+                'event_category': 'Contact',
+                'event_label': `${isReserve ? 'Reserve' : 'Contact'} ${modelName} via WhatsApp`
+            });
+        });
+    });
+
+    // Botón "TRABAJA CON NOSOTRAS"
+    const workWithUsButton = document.querySelector('.btn-top-bar');
+    if (workWithUsButton) {
+        workWithUsButton.addEventListener('click', () => {
+            trackEvent('work_with_us_click', {
+                'page_location': getCurrentPage(),
+                'event_category': 'Recruitment',
+                'event_label': 'Work With Us Button Clicked'
+            });
+        });
+    }
+});
+
+// 3. TRACKING DE TIEMPO EN PÁGINA
+let pageStartTime = Date.now();
+let timeTrackingInterval;
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Enviar tiempo cada 30 segundos
+    timeTrackingInterval = setInterval(() => {
+        const timeSpent = Math.floor((Date.now() - pageStartTime) / 1000);
+        trackEvent('time_on_page', {
+            'time_seconds': timeSpent,
+            'page_location': getCurrentPage(),
+            'event_category': 'Engagement',
+            'event_label': `${timeSpent}s on ${getCurrentPage()}`
+        });
+    }, 30000); // Cada 30 segundos
+
+    // Enviar tiempo al salir de la página
+    window.addEventListener('beforeunload', () => {
+        const timeSpent = Math.floor((Date.now() - pageStartTime) / 1000);
+        trackEvent('page_exit', {
+            'time_seconds': timeSpent,
+            'page_location': getCurrentPage(),
+            'event_category': 'Engagement',
+            'event_label': `Exited ${getCurrentPage()} after ${timeSpent}s`
+        });
+    });
+});
+
+// 4. TRACKING DE SCROLL DEPTH
+let scrollDepthTracked = {
+    25: false,
+    50: false,
+    75: false,
+    100: false
+};
+
+window.addEventListener('scroll', () => {
+    const windowHeight = window.innerHeight;
+    const documentHeight = document.documentElement.scrollHeight;
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const scrollPercent = Math.round((scrollTop / (documentHeight - windowHeight)) * 100);
+
+    // Rastrear hitos de scroll
+    [25, 50, 75, 100].forEach(depth => {
+        if (scrollPercent >= depth && !scrollDepthTracked[depth]) {
+            scrollDepthTracked[depth] = true;
+            trackEvent('scroll_depth', {
+                'scroll_depth': depth,
+                'page_location': getCurrentPage(),
+                'event_category': 'Engagement',
+                'event_label': `Scrolled ${depth}% of ${getCurrentPage()}`
+            });
+        }
+    });
+}, { passive: true });
+
+// 5. TRACKING DE NAVEGACIÓN
+document.addEventListener('DOMContentLoaded', () => {
+    const navLinks = document.querySelectorAll('.nav-menu a, .nav-dropdown a');
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            const linkText = link.textContent?.trim();
+            const linkHref = link.getAttribute('href');
+            trackEvent('navigation_click', {
+                'link_text': linkText,
+                'link_url': linkHref,
+                'page_location': getCurrentPage(),
+                'event_category': 'Navigation',
+                'event_label': `Clicked ${linkText}`
+            });
+        });
+    });
+});
+
+// 6. TRACKING DE INTERACCIONES CON EL SLIDER
+document.addEventListener('DOMContentLoaded', () => {
+    // Botones prev/next del slider
+    const sliderPrev = document.querySelector('.slider-prev');
+    const sliderNext = document.querySelector('.slider-next');
+    
+    if (sliderPrev) {
+        sliderPrev.addEventListener('click', () => {
+            trackEvent('slider_navigation', {
+                'direction': 'prev',
+                'page_location': getCurrentPage(),
+                'event_category': 'Slider Interaction',
+                'event_label': 'Previous Button Clicked'
+            });
+        });
+    }
+    
+    if (sliderNext) {
+        sliderNext.addEventListener('click', () => {
+            trackEvent('slider_navigation', {
+                'direction': 'next',
+                'page_location': getCurrentPage(),
+                'event_category': 'Slider Interaction',
+                'event_label': 'Next Button Clicked'
+            });
+        });
+    }
+
+    // Dots del slider (móvil)
+    const sliderDots = document.querySelectorAll('.slider-dot');
+    sliderDots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            trackEvent('slider_dot_click', {
+                'dot_index': index + 1,
+                'page_location': getCurrentPage(),
+                'event_category': 'Slider Interaction',
+                'event_label': `Clicked Dot ${index + 1}`
+            });
+        });
+    });
+});
+
+// 7. TRACKING DE VISUALIZACIÓN DE IMÁGENES EN GALERÍA
+document.addEventListener('DOMContentLoaded', () => {
+    const galleryImages = document.querySelectorAll('.model-gallery img, .gallery-item img');
+    if (galleryImages.length > 0) {
+        const imageObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    const modelName = getCurrentPage();
+                    const imageSrc = img.getAttribute('src') || '';
+                    
+                    trackEvent('gallery_image_view', {
+                        'model_name': modelName,
+                        'image_src': imageSrc.split('/').pop(),
+                        'page_location': getCurrentPage(),
+                        'event_category': 'Gallery View',
+                        'event_label': `Viewed image in ${modelName} gallery`
+                    });
+                    
+                    // Dejar de observar después de rastrear
+                    imageObserver.unobserve(img);
+                }
+            });
+        }, {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.5
+        });
+
+        galleryImages.forEach(img => {
+            imageObserver.observe(img);
+        });
+    }
+});
+
+// 8. TRACKING DE PÁGINA VISTA (Page View mejorado)
+document.addEventListener('DOMContentLoaded', () => {
+    // Enviar evento personalizado de página vista después de un pequeño delay
+    setTimeout(() => {
+        trackEvent('page_view_enhanced', {
+            'page_location': getCurrentPage(),
+            'page_title': document.title,
+            'page_path': window.location.pathname,
+            'event_category': 'Page View',
+            'event_label': `Viewed ${getCurrentPage()}`
+        });
+    }, 1000);
+});
+
+// 9. TRACKING DE BOTONES "VISÍTAME" EN EL SLIDER
+document.addEventListener('DOMContentLoaded', () => {
+    const visitButtons = document.querySelectorAll('.btn-visit-model');
+    visitButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            const modelName = getModelName(button);
+            trackEvent('visit_model_click', {
+                'model_name': modelName,
+                'page_location': getCurrentPage(),
+                'button_location': 'slider',
+                'event_category': 'Model Interaction',
+                'event_label': `Visit ${modelName} from Slider`
+            });
+        });
+    });
+});
+
+// 10. TRACKING DE RESIZE DE VENTANA (útil para saber si es móvil/desktop)
+let resizeTimeout;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+        const isMobile = window.innerWidth <= 768;
+        trackEvent('window_resize', {
+            'window_width': window.innerWidth,
+            'window_height': window.innerHeight,
+            'device_type': isMobile ? 'mobile' : 'desktop',
+            'page_location': getCurrentPage(),
+            'event_category': 'Technical',
+            'event_label': `Window resized to ${window.innerWidth}x${window.innerHeight}`
+        });
+    }, 500);
+});
