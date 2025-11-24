@@ -122,7 +122,6 @@ Necesitas reemplazar `https://clandestinaspa.com` con tu dominio real en:
 - `modelo-sofia.html`
 - `modelo-angie.html`
 - `modelo-catalina.html`
-- `modelo-valentina.html`
 - `sitemap.xml`
 
 ### 4.2 Archivos a actualizar
