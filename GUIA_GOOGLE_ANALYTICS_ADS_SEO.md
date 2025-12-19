@@ -104,7 +104,6 @@
 3. Click en **"Solicitar indexación"**
 4. Repite para páginas importantes:
    - `/agencia.html`
-   - `/modelo-camila.html`
    - etc.
 
 ---
@@ -115,7 +114,6 @@
 Necesitas reemplazar `https://clandestinaspa.com` con tu dominio real en:
 - `index.html`
 - `agencia.html`
-- `modelo-camila.html`
 - `modelo-maria.html`
 - `modelo-ana.html`
 - `modelo-vanesa.html`
